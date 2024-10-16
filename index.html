@@ -39,6 +39,9 @@
             this.load.on('complete', () => {
                 console.log("All assets loaded successfully");
             });
+
+            // Load the jump sound
+            this.load.audio('jump', 'assets/jump.wav');
         }
         function create() {
             // Initialize gameIsOver flag
@@ -140,6 +143,9 @@
             this.restartButton.setDepth(2);
             this.restartButton.visible = false;
 
+            // Create the jump sound
+            this.jumpSound = this.sound.add('jump');
+
             // Define gameOver as a method of the scene
             this.gameOver = function() {
                 if (!this.gameIsOver) {
@@ -161,6 +167,9 @@
                 // Jump when the spacekey is hit
                 if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE).isDown) {
                     this.bird.body.velocity.y = -350;
+                    
+                    // Play the jump sound
+                    this.jumpSound.play();
                 } 
 
                 // If the bird is out of the screen (too high, too low, or too far left)
