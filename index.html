@@ -36,7 +36,7 @@
             this.load.image('background', 'assets/background.png');
             
             // Load the bird sprite
-            this.load.image('bird', 'assets/bird.png');
+            this.load.spritesheet('bird', 'assets/barb.png', { frameWidth: 50, frameHeight: 83 } );
             // Load the pipe sprite
             this.load.image('pipe', 'assets/pipe.png');
             // Add this line to check if the pipe image loaded successfully
@@ -50,10 +50,18 @@
         function create() {
 
             //Display the background
-            this.add.image(200, 200, 'background');
+            this.add.image(200, 245, 'background');
             
             // Initialize gameIsOver flag
             this.gameIsOver = false;
+
+            //Animate Jellyfish
+            this.anims.create({
+                key: 'barb',
+                frames: this.anims.generateFrameNumbers('bird', { start: 0, end: 3 }),
+                frameRate: 5,
+                repeat: -1
+            });
 
             console.log("Create function started");
             // Display the bird at the position x=100 and y=245
@@ -153,7 +161,7 @@
             this.restartButton.visible = false;
 
             // Create the jump sound
-            this.jumpSound = this.sound.add('jump');
+            this.jumpSound = this.sound.add('jump', { volume: 0.2 });
 
             // Define gameOver as a method of the scene
             this.gameOver = function() {
@@ -171,6 +179,9 @@
             };
         }
         function update() {
+
+            this.bird.anims.play('barb', true);
+
             // If the game is not over, check for input and update game state
             if (!this.gameIsOver) {
                 // Jump when the spacekey is hit
