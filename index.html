@@ -131,7 +131,7 @@
                 console.log("Bird out of bounds, restarting scene");
                 this.scene.restart();
             }
-            // Check for score increment
+            // Check for score incrementing
             this.children.list.forEach((child) => {
                 if (child.type === 'Zone' && !child.scored && child.x < this.bird.x + this.bird.width / 2) {
                     this.score += 1;
