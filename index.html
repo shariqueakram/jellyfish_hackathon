@@ -41,6 +41,9 @@
             });
         }
         function create() {
+            // Initialize gameIsOver flag
+            this.gameIsOver = false;
+
             console.log("Create function started");
             // Display the bird at the position x=100 and y=245
             this.bird = this.physics.add.sprite(100, 245, 'bird');
@@ -119,35 +122,72 @@
             this.addRowOfPipes();
             console.log("Create function completed");
             this.physics.add.collider(this.bird, this.pipes);
+
+            // Add game over text and restart button
+            this.gameOverText = this.add.text(200, 200, 'Game Over', 
+                { fontSize: '32px', fill: '#000', fontWeight: 'bold' }
+            );
+            this.gameOverText.setOrigin(0.5);
+            this.gameOverText.setDepth(2);
+            this.gameOverText.visible = false;
+
+            this.restartButton = this.add.text(200, 250, 'Restart', 
+                { fontSize: '24px', fill: '#000', fontWeight: 'bold', backgroundColor: '#4CAF50', padding: { left: 10, right: 10, top: 5, bottom: 5 } }
+            );
+            this.restartButton.setOrigin(0.5);
+            this.restartButton.setInteractive({ useHandCursor: true });
+            this.restartButton.on('pointerdown', () => this.scene.restart());
+            this.restartButton.setDepth(2);
+            this.restartButton.visible = false;
+
+            // Define gameOver as a method of the scene
+            this.gameOver = function() {
+                if (!this.gameIsOver) {
+                    this.gameIsOver = true;
+                    this.physics.pause();
+                    this.bird.setTint(0xff0000);
+                    this.gameOverText.visible = true;
+                    this.restartButton.visible = true;
+                    if (this.pipeTimer) {
+                        this.pipeTimer.remove();
+                    }
+                    console.log("Game Over function called. Restart button should be visible.");
+                }
+            };
         }
         function update() {
-            // Jump when the spacekey is hit
-            if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE).isDown) {
-                this.bird.body.velocity.y = -350;
-            }
-            // If the bird is out of the screen (too high or too low)
-            // Restart the Game
-            if (this.bird.y < 0 || this.bird.y > 490) {
-                console.log("Bird out of bounds, restarting scene");
-                this.scene.restart();
-            }
-            // Check for score incrementing
-            this.children.list.forEach((child) => {
-                if (child.type === 'Zone' && !child.scored && child.x < this.bird.x + this.bird.width / 2) {
-                    this.score += 1;
-                    this.scoreText.setText('Score: ' + this.score);
-                    child.scored = true;
-                    console.log("Score incremented. New score:", this.score);
-                }
-            });
+            // If the game is not over, check for input and update game state
+            if (!this.gameIsOver) {
+                // Jump when the spacekey is hit
+                if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE).isDown) {
+                    this.bird.body.velocity.y = -350;
+                } 
 
-            // Add this block to remove pipes that have moved off-screen
-            this.pipes.getChildren().forEach((pipe) => {
-                if (pipe.x < -pipe.width) {
-                    console.log("Removing pipe from game");
-                    this.pipes.remove(pipe, true, true);
+                // If the bird is out of the screen (too high, too low, or too far left)
+                // Show game over screen
+                if (this.bird.y < 0 || this.bird.y > 490 || this.bird.x < -this.bird.width) {
+                    this.gameOver();
                 }
-            });
-        }</script>
+
+                // Check for score incrementing
+                this.children.list.forEach((child) => {
+                    if (child.type === 'Zone' && !child.scored && child.x < this.bird.x + this.bird.width / 2) {
+                        this.score += 1;
+                        this.scoreText.setText('Score: ' + this.score);
+                        child.scored = true;
+                        console.log("Score incremented. New score:", this.score);
+                    }
+                });
+
+                // Add this block to remove pipes that have moved off-screen
+                this.pipes.getChildren().forEach((pipe) => {
+                    if (pipe.x < -pipe.width) {
+                        console.log("Removing pipe from game");
+                        this.pipes.remove(pipe, true, true);
+                    }
+                });
+            }
+        }
+    </script>
 </body>
 </html>
