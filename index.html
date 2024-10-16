@@ -31,6 +31,10 @@
         };
         var game = new Phaser.Game(config);
         function preload() {
+
+            //Load the background
+            this.load.image('background', 'assets/background.png');
+            
             // Load the bird sprite
             this.load.image('bird', 'assets/bird.png');
             // Load the pipe sprite
@@ -44,6 +48,10 @@
             this.load.audio('jump', 'assets/jump.wav');
         }
         function create() {
+
+            //Display the background
+            this.add.image(200, 200, 'background');
+            
             // Initialize gameIsOver flag
             this.gameIsOver = false;
 
