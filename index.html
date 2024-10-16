@@ -71,6 +71,9 @@
                 // Automatically kill the pipe when it's no longer visible
                 pipe.checkWorldBounds = true;
                 pipe.outOfBoundsKill = true;
+
+                // Add a flag to check if this pipe has been scored
+                pipe.scored = false;
             }
             // Define addRowOfPipes as a method of the scene
             this.addRowOfPipes = () => {
@@ -78,6 +81,12 @@
                 // Randomly pick a number between 1 and 5
                 // This will be the hole position
                 var hole = Math.floor(Math.random() * 5) + 1;
+                
+                // Create a scoring zone for this set of pipes
+                var scoringZone = this.add.zone(350, 0, 60, this.sys.game.config.height);
+                this.physics.add.existing(scoringZone, true);
+                scoringZone.scored = false;
+
                 // Add the 6 pipes
                 // With one big hole at position 'hole' and 'hole + 1'
                 for (var i = 0; i < 8; i++) {
@@ -85,6 +94,18 @@
                         this.addOnePipe(400, i * 60 + 10);
                     }
                 }
+
+                // Move the scoring zone with the pipes
+                this.tweens.add({
+                    targets: scoringZone,
+                    x: -60,
+                    ease: 'Linear',
+                    duration: 3000,
+                    repeat: 0,
+                    onComplete: function() {
+                        scoringZone.destroy();
+                    }
+                });
             }
             // Add pipes every 1.5 seconds
             this.pipeTimer = this.time.addEvent({
@@ -110,9 +131,20 @@
                 console.log("Bird out of bounds, restarting scene");
                 this.scene.restart();
             }
+            // Check for score increment
+            this.children.list.forEach((child) => {
+                if (child.type === 'Zone' && !child.scored && child.x < this.bird.x + this.bird.width / 2) {
+                    this.score += 1;
+                    this.scoreText.setText('Score: ' + this.score);
+                    child.scored = true;
+                    console.log("Score incremented. New score:", this.score);
+                }
+            });
+
             // Add this block to remove pipes that have moved off-screen
             this.pipes.getChildren().forEach((pipe) => {
                 if (pipe.x < -pipe.width) {
+                    console.log("Removing pipe from game");
                     this.pipes.remove(pipe, true, true);
                 }
             });
