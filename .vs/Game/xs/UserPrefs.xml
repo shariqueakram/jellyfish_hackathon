@@ -1,0 +1,23 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workbench ActiveDocument="../../../../Applications/MAMP/htdocs/Game/index.html">
+    <Files>
+      <File FileName="../../../../Applications/MAMP/htdocs/phaser3-tutorial-src/part1.html" Line="130" Column="14" />
+      <File FileName="../../../../Applications/MAMP/htdocs/Game/index.html" Line="49" Column="46" />
+      <File FileName="../Phaser/phaser3-tutorial-src/part1.html" Line="122" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Game" expanded="True" selected="True" />
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.Game FirstBuild="True" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
