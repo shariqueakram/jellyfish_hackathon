@@ -64,9 +64,10 @@
             console.log("Pipes group created:", this.pipes);
             // Add score variable and text
             this.score = 0;
-            this.scoreText = this.add.text(300, 10, 'Score: 0', 
+            this.scoreText = this.add.text(10, 10, 'Score: 0', 
                 { fontSize: '20px', fill: '#000', fontWeight: 'bold' }
             );
+            this.scoreText.setOrigin(0, 0);  // Align to top-left corner
             this.scoreText.setDepth(1);  // Ensure the score is always on top
             // Define addOnePipe as a method of the scene
             this.addOnePipe = (x, y) => {
